@@ -2,6 +2,7 @@
 
 const mongoose = require('mongoose'), 
 	methodOverride = require('method-override'),
+	expressSanitizer = require('express-sanitizer'),
 	express = require('express'),
 	app = express();
 
@@ -11,6 +12,7 @@ mongoose.connect('mongodb://localhost/semantic_blog');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
+app.use(expressSanitizer());
 app.use(methodOverride('_method'));
 
 // MONGOOSE MODEL CONFIG
@@ -43,6 +45,8 @@ app.get('/blogs/new', (req, res) => {
 
 // CREATE ROUTE
 app.post('/blogs', (req, res) => {
+	req.body.blog.body = req.sanitize(req.body.blog.body);
+
 	Blog.create(req.body.blog, function(err, newBlog) {
 		if (err) res.render('new');
 		else res.redirect('/blogs');
@@ -67,6 +71,8 @@ app.get('/blogs/:id/edit', (req, res) => {
 
 // UPDATE ROUTE
 app.put('/blogs/:id', (req, res) => {
+	req.body.blog.body = req.sanitize(req.body.blog.body);
+	
 	Blog.findByIdAndUpdate(req.params.id, req.body.blog, 
 		function(err, updatedBlog) {
 			if (err) res.redirect('/blogs');
