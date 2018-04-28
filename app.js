@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose'), 
+	methodOverride = require('method-override'),
 	express = require('express'),
 	app = express();
 
@@ -10,6 +11,7 @@ mongoose.connect('mongodb://localhost/semantic_blog');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 // MONGOOSE MODEL CONFIG
 const blogSchema = new mongoose.Schema({
@@ -53,6 +55,19 @@ app.get('/blogs/:id', (req, res) => {
 		if (err) res.redirect('/blogs');
 		else res.render('show', {blog: foundBlog});
 	});
+});
+
+// EDIT ROUTE
+app.get('/blogs/:id/edit', (req, res) => {
+	Blog.findById(req.params.id, function(err, foundBlog) {
+		if (err) res.redirect('/blogs');
+		else	res.render('edit', {blog: foundBlog});
+	});
+});
+
+// UPDATE ROUTE
+app.put('/blogs/:id', (req, res) => {
+	res.send('Update route');
 });
 
 app.listen(3000, () => console.log('Server has started!'));
