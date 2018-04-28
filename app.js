@@ -67,7 +67,11 @@ app.get('/blogs/:id/edit', (req, res) => {
 
 // UPDATE ROUTE
 app.put('/blogs/:id', (req, res) => {
-	res.send('Update route');
+	Blog.findByIdAndUpdate(req.params.id, req.body.blog, 
+		function(err, updatedBlog) {
+			if (err) res.redirect('/blogs');
+			else res.redirect('/blogs/' + req.params.id);
+	});
 });
 
 app.listen(3000, () => console.log('Server has started!'));
