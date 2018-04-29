@@ -14,11 +14,11 @@ You'll need to have the following software installed on your computer:
 
 ### Getting Started
 
-To run SemanticBlog, open a `Terminal` at the root of the project directory and run the following commands:
+First you'll want to open a `Terminal` and run the Mongo daemon with the `mongod` command.
+
+Then, at the root of the project directory run the following commands:
 
 `npm install`
-
-`mongod`
 
 `node app.js`
 
